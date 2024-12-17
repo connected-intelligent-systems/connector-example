@@ -1,0 +1,4 @@
+[submodule "components/portal"]
+	path = components/portal
+	url = https://github.com/connected-intelligent-systems/portal.git
+	branch = dev-geodataspace
