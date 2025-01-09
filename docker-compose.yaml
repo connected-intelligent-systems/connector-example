@@ -113,7 +113,9 @@ services:
         restart: true
 
   portal-provider:
-    image: ghcr.io/connected-intelligent-systems/portal:develop
+    build:
+      context: ./components/portal
+      dockerfile: Dockerfile
     ports:
       - "8085:8085"
     environment:
@@ -135,7 +137,9 @@ services:
       
 
   portal-consumer:
-    image: ghcr.io/connected-intelligent-systems/portal:develop
+    build:
+      context: ./components/portal
+      dockerfile: Dockerfile
     ports:
       - "8086:8086"
     environment:
@@ -243,7 +247,9 @@ configs:
         showContractAgreements: ${PORTAL_FRONTEND_SHOW_CONTRACT_AGREEMENTS-true},
         showTransferProcesses: ${PORTAL_FRONTEND_SHOW_TRANSFER_PROCESSES-true},
         showThingsboard: ${PORTAL_FRONTEND_SHOW_THINGSBOARD-false},
-        showKeycloak: ${PORTAL_FRONTEND_SHOW_KEYCLOAK-false}
+        showKeycloak: ${PORTAL_FRONTEND_SHOW_KEYCLOAK-false},
+        useInGeoLogo: ${PORTAL_FRONTEND_USE_IN_GEO_LOGO-true}
+
       }
   geodata_nginx_config:
     content: |
