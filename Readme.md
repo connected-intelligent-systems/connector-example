@@ -15,6 +15,11 @@ Ressources available at:
 ## Components
 ### Keycloak
 This deployment uses Keycloak for identity and access management to realize communication between the two Eclipse Dataspace Connectors.
+```
+Default login:
+    Username: admin
+    Password: admin
+```
 
 ### EDC
 Each of the participants has their own EDC Instance configured to authenticate with Keycloak.
