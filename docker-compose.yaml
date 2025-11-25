@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   edc-provider:
-    image: ghcr.io/connected-intelligent-systems/connector:v0.10.0
+    image: ghcr.io/connected-intelligent-systems/connector:v0.11.1
     ports:
       - 19191:19191 # health check
       # - 19192:19192
@@ -57,7 +57,7 @@ services:
         restart: true
 
   edc-consumer:
-    image: ghcr.io/connected-intelligent-systems/connector:v0.10.0
+    image: ghcr.io/connected-intelligent-systems/connector:v0.11.1
     ports:
       - 29191:19191 # health check
       # - 29192:19192
@@ -161,7 +161,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: dataspace
-    image: bitnami/postgresql:17.2.0
+    image: bitnamilegacy/postgresql:17.2.0
     ports:
       - "5432:5432"
     configs:
@@ -174,7 +174,7 @@ services:
       retries: 5
 
   keycloak:
-    image: bitnami/keycloak:23.0.3
+    image: bitnamilegacy/keycloak:23.0.3
     ports:
       - "8080:8080"
     environment:
