@@ -46,6 +46,10 @@ services:
       EDC_AGENT_IDENTITY_KEY: participant_id
       EDC_PARTICIPANT_ID: company1
       EDC_NODES_FILE_PATH: /resources/nodes.properties
+      EDC_WEB_REST_CORS_ENABLED: true
+      EDC_WEB_REST_CORS_ORIGINS: "*"
+      EDC_WEB_REST_CORS_HEADERS: Content-Type,Authorization
+      EDC_WEB_REST_CORS_METHODS: GET,POST,OPTIONS
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:19191/api/check/health"]
       interval: 20s
@@ -102,6 +106,10 @@ services:
       EDC_AGENT_IDENTITY_KEY: participant_id
       EDC_PARTICIPANT_ID: company2
       EDC_NODES_FILE_PATH: /resources/nodes.properties
+      EDC_WEB_REST_CORS_ENABLED: true
+      EDC_WEB_REST_CORS_ORIGINS: "*"
+      EDC_WEB_REST_CORS_HEADERS: Content-Type,Authorization
+      EDC_WEB_REST_CORS_METHODS: GET,POST,OPTIONS
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:19191/api/check/health"]
       interval: 20s
@@ -113,21 +121,16 @@ services:
         restart: true
 
   portal-provider:
-    image: ghcr.io/connected-intelligent-systems/portal:ingeodtm-demo-1
+    image: ghcr.io/connected-intelligent-systems/portal:develop
     ports:
-      - "8085:8085"
+      - "8085:80"
     environment:
-      EDC_URL: http://edc-provider:19193/management
-      FEDERATED_CATALOG_URL: http://edc-provider:19199/catalog
-      PORT: 8085
-      DEFAULT_USER_ID: company1
-      DEFAULT_USER_FULL_NAME: Company 1
-      DEFAULT_USER_EMAIL: admin@company1.local
-      DEFAULT_USER_TENANT_ID: default
-      DEFAULT_USER_ROLES: admin
-    configs:
-      - source: portal_config_js
-        target: /app/public/config.js
+      EDC_MANAGEMENT_API_URL: http://edc-provider:19193/management/
+      EDC_PROTOCOL_API_URL: http://edc-provider:19194/protocol/
+      EDC_API_KEY: public-key
+    volumes:
+      - ./portal/provider/config.js:/usr/share/nginx/html/config.js
+      - ./portal/provider/logo.svg:/usr/share/nginx/html/logo.svg
     depends_on:
       edc-provider:
         condition: service_healthy
@@ -135,21 +138,17 @@ services:
       
 
   portal-consumer:
-    image: ghcr.io/connected-intelligent-systems/portal:ingeodtm-demo-1
+    image: ghcr.io/connected-intelligent-systems/portal:develop
     ports:
-      - "8086:8086"
+      - "8086:80"
     environment:
-      EDC_URL: http://edc-consumer:19193/management
-      FEDERATED_CATALOG_URL: http://edc-consumer:19199/catalog
-      PORT: 8086
-      DEFAULT_USER_ID: company2
-      DEFAULT_USER_FULL_NAME: Company 2
-      DEFAULT_USER_EMAIL: admin@company2.local
-      DEFAULT_USER_TENANT_ID: default
-      DEFAULT_USER_ROLES: admin
-    configs:
-      - source: portal_config_js
-        target: /app/public/config.js
+      EDC_MANAGEMENT_API_URL: http://edc-consumer:19193/management/
+      EDC_PROTOCOL_API_URL: http://edc-consumer:19194/protocol/
+      EDC_API_KEY: public-key
+    volumes:
+      - ./portal/consumer/config.js:/usr/share/nginx/html/config.js
+      - ./portal/consumer/logo.svg:/usr/share/nginx/html/logo.svg
+      - ./portal/consumer/index.html:/usr/share/nginx/html/index.html
     depends_on:
       edc-consumer:
         condition: service_healthy
